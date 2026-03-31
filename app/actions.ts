@@ -25,6 +25,31 @@ const bookingSchema = z.object({
 
 const bookingStatusSchema = z.enum(["CONFIRMED", "ACTIVE", "COMPLETED", "CANCELLED"]);
 
+const staffBookingSchema = bookingSchema.extend({
+  customerName: z.string().min(2),
+  customerPhone: z.string().min(5).optional().or(z.literal("")),
+  customerEmail: z.string().email().optional().or(z.literal("")),
+});
+
+async function assertCarIsAvailable(params: {
+  carId: string;
+  startDate: Date;
+  endDate: Date;
+}) {
+  const overlappingBooking = await prisma.booking.findFirst({
+    where: {
+      carId: params.carId,
+      status: { in: ["CONFIRMED", "ACTIVE"] },
+      startDate: { lte: params.endDate },
+      endDate: { gte: params.startDate },
+    },
+  });
+
+  if (overlappingBooking) {
+    throw new Error("Car already booked for selected dates.");
+  }
+}
+
 export async function createCar(formData: FormData) {
   const { userId } = await auth();
   if (!userId) {
@@ -65,18 +90,7 @@ export async function createBooking(formData: FormData) {
     throw new Error("End date must be after start date.");
   }
 
-  const overlappingBooking = await prisma.booking.findFirst({
-    where: {
-      carId: parsed.carId,
-      status: "CONFIRMED",
-      startDate: { lte: endDate },
-      endDate: { gte: startDate },
-    },
-  });
-
-  if (overlappingBooking) {
-    throw new Error("Car already booked for selected dates.");
-  }
+  await assertCarIsAvailable({ carId: parsed.carId, startDate, endDate });
 
   const totalPrice = Number(car.dailyRate) * rentalDays;
 
@@ -84,6 +98,7 @@ export async function createBooking(formData: FormData) {
     data: {
       carId: parsed.carId,
       clerkUserId: userId,
+      createdByClerkUserId: userId,
       startDate,
       endDate,
       totalPrice,
@@ -92,6 +107,47 @@ export async function createBooking(formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/my-bookings");
+}
+
+export async function createBookingForCustomer(formData: FormData) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("You must sign in.");
+  }
+
+  const parsed = staffBookingSchema.parse(Object.fromEntries(formData));
+  const car = await prisma.car.findUnique({ where: { id: parsed.carId } });
+  if (!car) {
+    throw new Error("Car not found.");
+  }
+
+  const startDate = new Date(parsed.startDate);
+  const endDate = new Date(parsed.endDate);
+  const rentalDays = differenceInCalendarDays(endDate, startDate) + 1;
+
+  if (rentalDays <= 0) {
+    throw new Error("End date must be after start date.");
+  }
+
+  await assertCarIsAvailable({ carId: parsed.carId, startDate, endDate });
+
+  const totalPrice = Number(car.dailyRate) * rentalDays;
+
+  await prisma.booking.create({
+    data: {
+      carId: parsed.carId,
+      createdByClerkUserId: userId,
+      customerName: parsed.customerName,
+      customerPhone: parsed.customerPhone || null,
+      customerEmail: parsed.customerEmail || null,
+      startDate,
+      endDate,
+      totalPrice,
+    },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/");
 }
 
 export async function cancelBooking(formData: FormData) {

@@ -1,4 +1,9 @@
-import { createCar, deleteCar, updateBookingStatus } from "@/app/actions";
+import {
+  createBookingForCustomer,
+  createCar,
+  deleteCar,
+  updateBookingStatus,
+} from "@/app/actions";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -69,6 +74,30 @@ export default async function DashboardPage() {
         </form>
       </section>
 
+      <section className="rounded-xl bg-white p-6 shadow-sm">
+        <h2 className="mb-4 text-xl font-semibold">Book for customer</h2>
+        <form action={createBookingForCustomer} className="grid gap-3 md:grid-cols-2">
+          <select name="carId" required className="input" defaultValue="">
+            <option value="" disabled>
+              Select car
+            </option>
+            {cars.map((car) => (
+              <option key={car.id} value={car.id}>
+                {car.brand} {car.name} (${Number(car.dailyRate).toFixed(2)}/day)
+              </option>
+            ))}
+          </select>
+          <input name="customerName" placeholder="Customer name" required className="input" />
+          <input name="customerPhone" placeholder="Phone (optional)" className="input" />
+          <input name="customerEmail" placeholder="Email (optional)" className="input" />
+          <input name="startDate" type="date" required className="input" />
+          <input name="endDate" type="date" required className="input" />
+          <button type="submit" className="btn-primary md:col-span-2">
+            Create booking
+          </button>
+        </form>
+      </section>
+
       <section className="grid gap-4 md:grid-cols-2">
         <div className="rounded-xl bg-white p-6 shadow-sm">
           <h2 className="mb-3 text-xl font-semibold">Fleet ({cars.length})</h2>
@@ -109,6 +138,14 @@ export default async function DashboardPage() {
                 <p className="font-medium">
                   {booking.car.brand} {booking.car.name}
                 </p>
+                {booking.customerName ? (
+                  <p className="text-slate-600">
+                    Customer: {booking.customerName}
+                    {booking.customerPhone ? ` • ${booking.customerPhone}` : ""}
+                  </p>
+                ) : (
+                  <p className="text-slate-600">Customer: (account booking)</p>
+                )}
                 <p className="text-slate-600">Current status: {booking.status}</p>
                 <form action={updateBookingStatus} className="mt-2 flex gap-2">
                   <input type="hidden" name="bookingId" value={booking.id} />

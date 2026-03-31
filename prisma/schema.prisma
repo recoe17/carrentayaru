@@ -24,7 +24,11 @@ model Car {
 
 model Booking {
   id          String   @id @default(cuid())
-  clerkUserId String
+  clerkUserId String?
+  createdByClerkUserId String?
+  customerName  String?
+  customerPhone String?
+  customerEmail String?
   carId       String
   startDate   DateTime
   endDate     DateTime
@@ -37,4 +41,5 @@ model Booking {
 
   @@index([carId, startDate, endDate])
   @@index([clerkUserId])
+  @@index([createdByClerkUserId])
 }
