@@ -17,9 +17,28 @@ model Car {
   fuelType    String
   imageUrl    String?
   location    String
+  serviceDueAt DateTime?
+  serviceNotes String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   bookings    Booking[]
+  serviceRecords ServiceRecord[]
+  quotes      Quote[]
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String?
+  email     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings  Booking[]
+  quotes    Quote[]
+
+  @@index([phone])
+  @@index([email])
 }
 
 model Booking {
@@ -29,6 +48,7 @@ model Booking {
   customerName  String?
   customerPhone String?
   customerEmail String?
+  customerId    String?
   carId       String
   startDate   DateTime
   endDate     DateTime
@@ -38,8 +58,88 @@ model Booking {
   updatedAt   DateTime @updatedAt
 
   car         Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+  customer    Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  quote       Quote?
+  payments    Payment[]
+  receipts    Receipt[]
 
   @@index([carId, startDate, endDate])
   @@index([clerkUserId])
   @@index([createdByClerkUserId])
+  @@index([customerId])
+}
+
+model Quote {
+  id          String   @id @default(cuid())
+  quoteNumber String   @unique
+  customerId  String?
+  customerName String
+  customerPhone String?
+  customerEmail String?
+  carId       String
+  startDate   DateTime
+  endDate     DateTime
+  dailyRate   Decimal  @db.Decimal(10, 2)
+  totalPrice  Decimal  @db.Decimal(10, 2)
+  status      String   @default("DRAFT") // DRAFT | SENT | ACCEPTED | REJECTED | CONVERTED
+  bookingId   String?  @unique
+  notes       String?
+  createdByClerkUserId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  car         Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+  customer    Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  booking     Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+
+  @@index([carId, startDate, endDate])
+  @@index([customerId])
+  @@index([createdByClerkUserId])
+}
+
+model Payment {
+  id          String   @id @default(cuid())
+  bookingId   String
+  amount      Decimal  @db.Decimal(10, 2)
+  method      String   // CASH | EFT | CARD | MOBILE
+  reference   String?
+  paidAt      DateTime @default(now())
+  createdByClerkUserId String?
+  createdAt   DateTime @default(now())
+
+  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  receipt     Receipt?
+
+  @@index([bookingId])
+  @@index([paidAt])
+}
+
+model Receipt {
+  id          String   @id @default(cuid())
+  receiptNumber String @unique
+  bookingId   String
+  paymentId   String?  @unique
+  issuedAt    DateTime @default(now())
+  issuedByClerkUserId String?
+
+  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  payment     Payment? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+
+  @@index([bookingId])
+  @@index([issuedAt])
+}
+
+model ServiceRecord {
+  id          String   @id @default(cuid())
+  carId       String
+  serviceDate DateTime @default(now())
+  description String
+  cost        Decimal? @db.Decimal(10, 2)
+  nextDueAt   DateTime?
+  createdAt   DateTime @default(now())
+
+  car         Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@index([carId])
+  @@index([nextDueAt])
 }

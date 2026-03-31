@@ -55,6 +55,11 @@ export default async function RootLayout({
                 {userId ? (
                   <>
                   <Link href="/dashboard">Dashboard</Link>
+                  <Link href="/dashboard/customers">Customers</Link>
+                  <Link href="/dashboard/quotes">Quotes</Link>
+                  <Link href="/dashboard/payments">Payments</Link>
+                  <Link href="/dashboard/reports">Reports</Link>
+                  <Link href="/dashboard/service">Service</Link>
                   <Link href="/my-bookings">My Bookings</Link>
                   <UserButton />
                   </>
