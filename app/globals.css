@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f1f5f9;
+  --background: #f8fafc;
   --foreground: #0f172a;
-  --brand-red: #e60000;
-  --brand-green: #3f6f3e;
+  --brand-red: #e11d48;
+  --brand-green: #166534;
+  --brand-indigo: #4f46e5;
+  --surface: #ffffff;
 }
 
 @theme inline {
@@ -15,30 +17,50 @@
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(circle at 0% 0%, #fee2e2 0%, transparent 35%),
+    radial-gradient(circle at 100% 0%, #e0e7ff 0%, transparent 35%),
+    var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
 .btn-primary {
-  @apply rounded-md px-3 py-2 text-white;
-  background: var(--brand-red);
+  @apply rounded-lg px-3 py-2 text-white shadow-sm transition;
+  background: linear-gradient(135deg, var(--brand-red), #fb7185);
 }
 
 .btn-primary:hover {
-  filter: brightness(0.92);
+  filter: brightness(0.96);
 }
 
 .btn-danger {
-  @apply rounded-md px-3 py-2 text-white;
+  @apply rounded-lg px-3 py-2 text-white shadow-sm;
   background: #b91c1c;
 }
 
 .btn-dark {
-  @apply rounded-md px-3 py-2 text-white;
-  background: #0f172a;
+  @apply rounded-lg px-3 py-2 text-white shadow-sm;
+  background: linear-gradient(135deg, #0f172a, #334155);
 }
 
 .input {
-  @apply w-full rounded-md border border-slate-300 px-3 py-2;
+  @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2;
+}
+
+.surface-card {
+  @apply rounded-2xl border border-slate-200 bg-white/90 shadow-sm backdrop-blur-sm;
+}
+
+.kpi-card {
+  @apply rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm backdrop-blur-sm;
+}
+
+.module-card {
+  @apply rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:shadow-md;
+}
+
+.module-badge {
+  @apply rounded-full px-2 py-1 text-xs text-white;
+  background: linear-gradient(135deg, var(--brand-indigo), var(--brand-green));
 }

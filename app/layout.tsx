@@ -38,7 +38,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
         <body className="min-h-full bg-slate-100 text-slate-900">
-          <header className="border-b border-slate-200 bg-white">
+          <header className="border-b border-slate-200 bg-white/90 backdrop-blur-sm">
             <nav className="mx-auto flex max-w-6xl items-center justify-between p-4">
               <Link href="/" className="flex items-center gap-3">
                 <img

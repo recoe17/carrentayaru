@@ -67,7 +67,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl bg-white p-6 shadow-sm">
+      <section className="surface-card p-6">
         <h1 className="text-2xl font-bold">Management Dashboard</h1>
         <p className="mt-1 text-slate-600">
           All modules in one place for daily rental operations.
@@ -75,21 +75,21 @@ export default async function DashboardPage() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl bg-white p-5 shadow-sm">
+        <div className="kpi-card">
           <p className="text-sm text-slate-500">Cars</p>
-          <p className="text-2xl font-bold">{carsCount}</p>
+          <p className="text-2xl font-bold text-[var(--brand-indigo)]">{carsCount}</p>
         </div>
-        <div className="rounded-xl bg-white p-5 shadow-sm">
+        <div className="kpi-card">
           <p className="text-sm text-slate-500">Customers</p>
-          <p className="text-2xl font-bold">{customersCount}</p>
+          <p className="text-2xl font-bold text-[var(--brand-green)]">{customersCount}</p>
         </div>
-        <div className="rounded-xl bg-white p-5 shadow-sm">
+        <div className="kpi-card">
           <p className="text-sm text-slate-500">Bookings</p>
-          <p className="text-2xl font-bold">{bookingsCount}</p>
+          <p className="text-2xl font-bold text-[var(--brand-red)]">{bookingsCount}</p>
         </div>
-        <div className="rounded-xl bg-white p-5 shadow-sm">
+        <div className="kpi-card">
           <p className="text-sm text-slate-500">Payments</p>
-          <p className="text-2xl font-bold">${paymentsTotal.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-[var(--brand-indigo)]">${paymentsTotal.toFixed(2)}</p>
         </div>
       </section>
 
@@ -98,13 +98,11 @@ export default async function DashboardPage() {
           <Link
             key={module.href}
             href={module.href}
-            className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[var(--brand-red)] hover:shadow-md"
+            className="module-card group hover:border-[var(--brand-red)]"
           >
             <div className="mb-3 flex items-center justify-between gap-2">
               <h2 className="text-lg font-semibold">{module.title}</h2>
-              <span className="rounded-full bg-slate-100 px-2 py-1 text-xs text-slate-700">
-                {module.badge}
-              </span>
+              <span className="module-badge">{module.badge}</span>
             </div>
             <p className="text-sm text-slate-600">{module.description}</p>
             <p className="mt-4 text-sm font-medium text-[var(--brand-red)]">Open module</p>
