@@ -1,4 +1,5 @@
-import { convertQuoteToBooking, createQuote } from "@/app/actions";
+import { createQuote } from "@/app/actions";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
 
@@ -20,7 +21,7 @@ export default async function QuotesPage() {
       <section className="rounded-xl bg-white p-6 shadow-sm">
         <h1 className="text-2xl font-bold">Quotations</h1>
         <p className="mt-1 text-slate-600">
-          Create quotes, send them to customers, and convert to bookings.
+          Create, preview, and track quote status before payment.
         </p>
       </section>
 
@@ -81,14 +82,14 @@ export default async function QuotesPage() {
                   {format(q.startDate, "dd MMM yyyy")} - {format(q.endDate, "dd MMM yyyy")} • Total $
                   {Number(q.totalPrice).toFixed(2)}
                 </p>
-                {q.status !== "CONVERTED" && (
-                  <form action={convertQuoteToBooking} className="mt-2">
-                    <input type="hidden" name="quoteId" value={q.id} />
-                    <button type="submit" className="btn-dark text-xs px-2.5 py-1.5">
-                      Convert to booking
-                    </button>
-                  </form>
-                )}
+                <div className="mt-2 flex gap-2">
+                  <Link href={`/dashboard/quotes/${q.id}`} className="btn-dark text-xs px-2.5 py-1.5">
+                    Preview
+                  </Link>
+                  <Link href="/dashboard/payments" className="btn-primary text-xs px-2.5 py-1.5">
+                    Receive payment
+                  </Link>
+                </div>
               </li>
             ))}
           </ul>

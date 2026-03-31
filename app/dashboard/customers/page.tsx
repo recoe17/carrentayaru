@@ -24,6 +24,18 @@ export default async function CustomersPage() {
           <input name="name" placeholder="Full name" required className="input" />
           <input name="phone" placeholder="Phone (optional)" className="input" />
           <input name="email" placeholder="Email (optional)" className="input md:col-span-2" />
+          <input name="nationalId" placeholder="National ID (optional)" className="input" />
+          <input name="licenseNumber" placeholder="Driver license number" className="input" />
+          <input name="licenseExpiryAt" type="date" className="input" />
+          <label className="flex items-center gap-2 text-sm text-slate-700">
+            <input type="checkbox" name="licenseVerified" />
+            License verified
+          </label>
+          <label className="flex items-center gap-2 text-sm text-slate-700 md:col-span-2">
+            <input type="checkbox" name="blacklisted" />
+            Blacklist / High risk customer
+          </label>
+          <textarea name="riskNotes" placeholder="Risk notes (optional)" className="input md:col-span-2" />
           <button type="submit" className="btn-primary md:col-span-2">
             Save customer
           </button>
@@ -41,6 +53,12 @@ export default async function CustomersPage() {
                 <p className="font-medium">{c.name}</p>
                 <p className="text-slate-600">
                   {c.phone ?? "—"} • {c.email ?? "—"}
+                </p>
+                <p className="text-slate-600">
+                  ID: {c.nationalId ?? "—"} • License: {c.licenseNumber ?? "—"}
+                </p>
+                <p className="text-slate-600">
+                  Verified: {c.licenseVerified ? "Yes" : "No"} • Risk: {c.blacklisted ? "High" : "Normal"}
                 </p>
               </li>
             ))}

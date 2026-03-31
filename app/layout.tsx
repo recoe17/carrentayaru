@@ -46,7 +46,7 @@ export default async function RootLayout({
                   alt="Yarutso Car Rental"
                   className="h-10 w-auto"
                 />
-                <span className="text-lg font-bold text-[var(--brand-red)]">
+                <span className="bg-gradient-to-r from-[var(--brand-red)] via-[var(--brand-orange)] to-[var(--brand-indigo)] bg-clip-text text-lg font-bold text-transparent">
                   Yarutso Car Rental
                 </span>
               </Link>
@@ -57,7 +57,7 @@ export default async function RootLayout({
                   </>
                 ) : (
                   <SignInButton mode="modal">
-                    <button className="rounded-md bg-[var(--brand-red)] px-3 py-1.5 text-white">
+                    <button className="btn-primary px-4 py-1.5">
                       Sign in
                     </button>
                   </SignInButton>

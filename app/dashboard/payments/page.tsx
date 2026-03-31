@@ -1,19 +1,27 @@
-import { recordPayment } from "@/app/actions";
+import { recordPayment, recordQuotePayment } from "@/app/actions";
 import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
 
 export const dynamic = "force-dynamic";
 
 export default async function PaymentsPage() {
-  const bookings = await prisma.booking.findMany({
-    orderBy: { createdAt: "desc" },
-    include: {
-      car: true,
-      payments: true,
-      receipts: true,
-    },
-    take: 50,
-  });
+  const [bookings, quotes] = await Promise.all([
+    prisma.booking.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        car: true,
+        payments: true,
+        receipts: true,
+      },
+      take: 50,
+    }),
+    prisma.quote.findMany({
+      where: { status: { not: "PAID" } },
+      orderBy: { createdAt: "desc" },
+      include: { car: true },
+      take: 50,
+    }),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -22,6 +30,41 @@ export default async function PaymentsPage() {
         <p className="mt-1 text-slate-600">
           Record payments and automatically generate receipts.
         </p>
+      </section>
+
+      <section className="rounded-xl bg-white p-6 shadow-sm">
+        <h2 className="mb-3 text-xl font-semibold">Receive quote payment</h2>
+        <form action={recordQuotePayment} className="grid gap-3 md:grid-cols-2">
+          <select name="quoteId" required className="input" defaultValue="">
+            <option value="" disabled>
+              Select quote
+            </option>
+            {quotes.map((q) => (
+              <option key={q.id} value={q.id}>
+                {q.quoteNumber} • {q.customerName} • ${Number(q.totalPrice).toFixed(2)}
+              </option>
+            ))}
+          </select>
+          <select name="method" required className="input" defaultValue="CASH">
+            <option value="CASH">Cash</option>
+            <option value="EFT">EFT</option>
+            <option value="CARD">Card</option>
+            <option value="MOBILE">Mobile</option>
+          </select>
+          <input
+            name="amount"
+            type="number"
+            step="0.01"
+            min={0.01}
+            required
+            placeholder="Amount received"
+            className="input"
+          />
+          <input name="reference" placeholder="Reference (optional)" className="input" />
+          <button type="submit" className="btn-primary md:col-span-2">
+            Receive payment and create receipt
+          </button>
+        </form>
       </section>
 
       <section className="rounded-xl bg-white p-6 shadow-sm">
@@ -43,6 +86,12 @@ export default async function PaymentsPage() {
             <option value="EFT">EFT</option>
             <option value="CARD">Card</option>
             <option value="MOBILE">Mobile</option>
+          </select>
+          <select name="type" required className="input" defaultValue="PAYMENT">
+            <option value="PAYMENT">Payment</option>
+            <option value="DEPOSIT">Deposit</option>
+            <option value="REFUND">Refund</option>
+            <option value="PENALTY">Penalty</option>
           </select>
           <input
             name="amount"
@@ -74,6 +123,9 @@ export default async function PaymentsPage() {
                 <p className="text-slate-600">
                   Total ${Number(b.totalPrice).toFixed(2)} • Paid ${paid.toFixed(2)} • Balance $
                   {balance.toFixed(2)}
+                </p>
+                <p className="text-slate-600">
+                  Penalties: late ${Number(b.latePenalty).toFixed(2)}, damage ${Number(b.damagePenalty).toFixed(2)}, fuel ${Number(b.fuelPenalty).toFixed(2)}
                 </p>
                 {b.receipts.length > 0 && (
                   <p className="text-slate-600">
