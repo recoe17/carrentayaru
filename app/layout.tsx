@@ -51,7 +51,7 @@ export default async function RootLayout({
                 </span>
               </Link>
               <div className="flex items-center gap-4 text-sm">
-                <Link href="/">Cars</Link>
+                <Link href="/cars">Cars</Link>
                 {userId ? (
                   <>
                   <Link href="/dashboard">Dashboard</Link>

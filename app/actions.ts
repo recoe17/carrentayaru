@@ -110,6 +110,7 @@ export async function createCar(formData: FormData) {
   });
 
   revalidatePath("/");
+  revalidatePath("/cars");
   revalidatePath("/dashboard");
 }
 
@@ -149,6 +150,7 @@ export async function createBooking(formData: FormData) {
   });
 
   revalidatePath("/");
+  revalidatePath("/cars");
   revalidatePath("/my-bookings");
 }
 
@@ -192,6 +194,44 @@ export async function createBookingForCustomer(formData: FormData) {
 
   revalidatePath("/dashboard");
   revalidatePath("/");
+  revalidatePath("/cars");
+}
+
+export async function createGuestBooking(formData: FormData) {
+  const parsed = staffBookingSchema.parse(Object.fromEntries(formData));
+  const car = await prisma.car.findUnique({ where: { id: parsed.carId } });
+  if (!car) {
+    throw new Error("Car not found.");
+  }
+
+  const startDate = new Date(parsed.startDate);
+  const endDate = new Date(parsed.endDate);
+  const rentalDays = differenceInCalendarDays(endDate, startDate) + 1;
+
+  if (rentalDays <= 0) {
+    throw new Error("End date must be after start date.");
+  }
+
+  await assertCarIsAvailable({ carId: parsed.carId, startDate, endDate });
+
+  const totalPrice = Number(car.dailyRate) * rentalDays;
+
+  await prisma.booking.create({
+    data: {
+      carId: parsed.carId,
+      customerId: parsed.customerId || null,
+      customerName: parsed.customerName,
+      customerPhone: parsed.customerPhone || null,
+      customerEmail: parsed.customerEmail || null,
+      startDate,
+      endDate,
+      totalPrice,
+      status: "CONFIRMED",
+    },
+  });
+
+  revalidatePath("/cars");
+  revalidatePath("/dashboard");
 }
 
 export async function createCustomer(formData: FormData) {
@@ -372,6 +412,7 @@ export async function cancelBooking(formData: FormData) {
 
   revalidatePath("/my-bookings");
   revalidatePath("/");
+  revalidatePath("/cars");
 }
 
 export async function updateBookingStatus(formData: FormData) {
@@ -415,4 +456,5 @@ export async function deleteCar(formData: FormData) {
 
   revalidatePath("/dashboard");
   revalidatePath("/");
+  revalidatePath("/cars");
 }
