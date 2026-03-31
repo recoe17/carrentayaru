@@ -23,6 +23,8 @@ const bookingSchema = z.object({
   endDate: z.string().date(),
 });
 
+const bookingStatusSchema = z.enum(["CONFIRMED", "ACTIVE", "COMPLETED", "CANCELLED"]);
+
 export async function createCar(formData: FormData) {
   const { userId } = await auth();
   if (!userId) {
@@ -115,5 +117,48 @@ export async function cancelBooking(formData: FormData) {
   });
 
   revalidatePath("/my-bookings");
+  revalidatePath("/");
+}
+
+export async function updateBookingStatus(formData: FormData) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("You must sign in.");
+  }
+
+  const bookingId = String(formData.get("bookingId") || "");
+  const rawStatus = String(formData.get("status") || "");
+  const status = bookingStatusSchema.parse(rawStatus);
+
+  if (!bookingId) {
+    throw new Error("Booking ID is required.");
+  }
+
+  await prisma.booking.update({
+    where: { id: bookingId },
+    data: { status },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/my-bookings");
+  revalidatePath("/");
+}
+
+export async function deleteCar(formData: FormData) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("You must sign in.");
+  }
+
+  const carId = String(formData.get("carId") || "");
+  if (!carId) {
+    throw new Error("Car ID is required.");
+  }
+
+  await prisma.car.delete({
+    where: { id: carId },
+  });
+
+  revalidatePath("/dashboard");
   revalidatePath("/");
 }

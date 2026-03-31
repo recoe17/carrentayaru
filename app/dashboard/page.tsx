@@ -1,4 +1,4 @@
-import { createCar } from "@/app/actions";
+import { createCar, deleteCar, updateBookingStatus } from "@/app/actions";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -13,13 +13,35 @@ export default async function DashboardPage() {
     }),
   ]);
 
+  const activeBookings = bookings.filter((booking) =>
+    ["CONFIRMED", "ACTIVE"].includes(booking.status),
+  ).length;
+  const totalRevenue = bookings
+    .filter((booking) => booking.status !== "CANCELLED")
+    .reduce((sum, booking) => sum + Number(booking.totalPrice), 0);
+
   return (
     <div className="space-y-6">
       <section className="rounded-xl bg-white p-6 shadow-sm">
         <h1 className="text-2xl font-bold">Fleet Dashboard</h1>
         <p className="mt-1 text-slate-600">
-          Add cars and monitor your latest bookings.
+          Manage inventory, booking lifecycle, and rental operations.
         </p>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-3">
+        <div className="rounded-xl bg-white p-5 shadow-sm">
+          <p className="text-sm text-slate-500">Total Cars</p>
+          <p className="text-2xl font-bold">{cars.length}</p>
+        </div>
+        <div className="rounded-xl bg-white p-5 shadow-sm">
+          <p className="text-sm text-slate-500">Open Rentals</p>
+          <p className="text-2xl font-bold">{activeBookings}</p>
+        </div>
+        <div className="rounded-xl bg-white p-5 shadow-sm">
+          <p className="text-sm text-slate-500">Revenue (non-cancelled)</p>
+          <p className="text-2xl font-bold">${totalRevenue.toFixed(2)}</p>
+        </div>
       </section>
 
       <section className="rounded-xl bg-white p-6 shadow-sm">
@@ -49,22 +71,64 @@ export default async function DashboardPage() {
 
       <section className="grid gap-4 md:grid-cols-2">
         <div className="rounded-xl bg-white p-6 shadow-sm">
-          <h2 className="mb-3 text-xl font-semibold">Cars ({cars.length})</h2>
+          <h2 className="mb-3 text-xl font-semibold">Fleet ({cars.length})</h2>
           <ul className="space-y-2 text-sm">
             {cars.map((car) => (
-              <li key={car.id} className="rounded-md border border-slate-200 p-2">
-                {car.brand} {car.name} - ${Number(car.dailyRate).toFixed(2)}/day
+              <li
+                key={car.id}
+                className="rounded-md border border-slate-200 p-3"
+              >
+                <p className="font-medium">
+                  {car.brand} {car.name}
+                </p>
+                <p className="text-slate-600">
+                  ${Number(car.dailyRate).toFixed(2)}/day - {car.location}
+                </p>
+                <form action={deleteCar} className="mt-2">
+                  <input type="hidden" name="carId" value={car.id} />
+                  <button
+                    type="submit"
+                    className="rounded-md bg-red-600 px-2.5 py-1.5 text-xs text-white"
+                  >
+                    Remove car
+                  </button>
+                </form>
               </li>
             ))}
           </ul>
         </div>
 
         <div className="rounded-xl bg-white p-6 shadow-sm">
-          <h2 className="mb-3 text-xl font-semibold">Latest bookings</h2>
+          <h2 className="mb-3 text-xl font-semibold">Manage Bookings</h2>
           <ul className="space-y-2 text-sm">
             {bookings.map((booking) => (
-              <li key={booking.id} className="rounded-md border border-slate-200 p-2">
-                {booking.car.brand} {booking.car.name} - {booking.status}
+              <li
+                key={booking.id}
+                className="rounded-md border border-slate-200 p-3"
+              >
+                <p className="font-medium">
+                  {booking.car.brand} {booking.car.name}
+                </p>
+                <p className="text-slate-600">Current status: {booking.status}</p>
+                <form action={updateBookingStatus} className="mt-2 flex gap-2">
+                  <input type="hidden" name="bookingId" value={booking.id} />
+                  <select
+                    name="status"
+                    defaultValue={booking.status}
+                    className="rounded-md border border-slate-300 px-2 py-1"
+                  >
+                    <option value="CONFIRMED">Confirmed</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="CANCELLED">Cancelled</option>
+                  </select>
+                  <button
+                    type="submit"
+                    className="rounded-md bg-slate-900 px-2.5 py-1.5 text-xs text-white"
+                  >
+                    Update
+                  </button>
+                </form>
               </li>
             ))}
           </ul>
