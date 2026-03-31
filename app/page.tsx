@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { SignInButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const { userId } = await auth();
+  if (userId) {
+    redirect("/dashboard");
+  }
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 py-10">
@@ -18,11 +22,6 @@ export default async function Home() {
 
       <section className="rounded-xl bg-white p-8 shadow-sm">
         <div className="grid gap-3 md:grid-cols-2">
-          {userId && (
-            <Link href="/cars" className="btn-primary text-center">
-              Continue to cars
-            </Link>
-          )}
           <SignInButton mode="modal">
             <button className="btn-dark">Sign in</button>
           </SignInButton>
