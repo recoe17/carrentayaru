@@ -23,9 +23,7 @@ export default async function QuotePreviewPage({
     <div className="space-y-6">
       <section className="surface-card p-6">
         <h1 className="text-2xl font-bold">Quote Preview</h1>
-        <p className="mt-1 text-slate-600">
-          {quote.quoteNumber} • Status: {quote.status}
-        </p>
+        <p className="mt-1 text-slate-600">{quote.quoteNumber}</p>
       </section>
 
       <section className="surface-card p-6">

@@ -31,6 +31,7 @@ export default async function FleetPage() {
         <form action={createCar} className="grid gap-3 md:grid-cols-2">
           <input name="brand" placeholder="Brand" required className="input" />
           <input name="name" placeholder="Model" required className="input" />
+          <input name="numberPlate" placeholder="Number plate (e.g. ABL 1234)" required className="input" />
           <input name="dailyRate" type="number" step="0.01" min={1} placeholder="Daily rate" required className="input" />
           <select name="status" className="input" defaultValue="AVAILABLE">
             <option value="AVAILABLE">Available</option>
@@ -83,6 +84,7 @@ export default async function FleetPage() {
                 <p className="text-slate-600">
                   ${Number(car.dailyRate).toFixed(2)} • {car.mileageKm} KM • Service due: {car.serviceDueAt ? car.serviceDueAt.toISOString().slice(0, 10) : "—"}
                 </p>
+                <p className="text-slate-600">Plate: {car.numberPlate ?? "—"}</p>
                 <form action={deleteCar} className="mt-2">
                   <input type="hidden" name="carId" value={car.id} />
                   <button type="submit" className="btn-danger text-xs px-2 py-1">Remove</button>

@@ -11,6 +11,7 @@ model Car {
   id          String    @id @default(cuid())
   name        String
   brand       String
+  numberPlate String?   @unique
   dailyRate   Decimal   @db.Decimal(10, 2)
   status      String    @default("AVAILABLE") // AVAILABLE | RENTED | MAINTENANCE
   mileageKm   Int       @default(0)

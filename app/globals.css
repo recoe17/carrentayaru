@@ -1,13 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f3ff;
+  --background: #f6f8ff;
   --foreground: #0f172a;
-  --brand-red: #f43f5e;
-  --brand-green: #22c55e;
-  --brand-indigo: #6366f1;
-  --brand-cyan: #06b6d4;
-  --brand-orange: #f97316;
+  --brand-red: #ef4444;
+  --brand-indigo: #2563eb;
   --surface: #ffffff;
 }
 
@@ -20,9 +17,8 @@
 
 body {
   background:
-    radial-gradient(circle at 0% 0%, #fecdd3 0%, transparent 35%),
-    radial-gradient(circle at 100% 0%, #c7d2fe 0%, transparent 35%),
-    radial-gradient(circle at 50% 100%, #a7f3d0 0%, transparent 30%),
+    radial-gradient(circle at 0% 0%, #fee2e2 0%, transparent 35%),
+    radial-gradient(circle at 100% 0%, #dbeafe 0%, transparent 35%),
     var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
@@ -30,12 +26,7 @@ body {
 
 .btn-primary {
   @apply rounded-xl px-3 py-2 text-white shadow-md transition;
-  background: linear-gradient(
-    135deg,
-    var(--brand-red),
-    var(--brand-orange) 45%,
-    var(--brand-indigo)
-  );
+  background: linear-gradient(135deg, var(--brand-red), var(--brand-indigo));
 }
 
 .btn-primary:hover {
@@ -69,22 +60,22 @@ body {
 }
 
 .module-card:nth-child(4n + 1) {
-  background-image: linear-gradient(145deg, rgba(99, 102, 241, 0.18), rgba(255, 255, 255, 0.92));
+  background-image: linear-gradient(145deg, rgba(37, 99, 235, 0.18), rgba(255, 255, 255, 0.92));
 }
 
 .module-card:nth-child(4n + 2) {
-  background-image: linear-gradient(145deg, rgba(244, 63, 94, 0.18), rgba(255, 255, 255, 0.92));
+  background-image: linear-gradient(145deg, rgba(239, 68, 68, 0.18), rgba(255, 255, 255, 0.92));
 }
 
 .module-card:nth-child(4n + 3) {
-  background-image: linear-gradient(145deg, rgba(6, 182, 212, 0.18), rgba(255, 255, 255, 0.92));
+  background-image: linear-gradient(145deg, rgba(37, 99, 235, 0.14), rgba(255, 255, 255, 0.92));
 }
 
 .module-card:nth-child(4n + 4) {
-  background-image: linear-gradient(145deg, rgba(34, 197, 94, 0.18), rgba(255, 255, 255, 0.92));
+  background-image: linear-gradient(145deg, rgba(239, 68, 68, 0.14), rgba(255, 255, 255, 0.92));
 }
 
 .module-badge {
   @apply rounded-full px-2 py-1 text-xs font-semibold text-white shadow-sm;
-  background: linear-gradient(135deg, var(--brand-indigo), var(--brand-cyan));
+  background: linear-gradient(135deg, var(--brand-indigo), var(--brand-red));
 }

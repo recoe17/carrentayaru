@@ -75,23 +75,25 @@ export default async function DashboardPage() {
       href: "/my-bookings",
       badge: "client portal",
     },
-    {
-      title: "User & Access",
-      description: "Assign Admin/Accountant/Clerk roles and monitor activity.",
-      href: "/dashboard/access",
-      badge: "security",
-    },
   ];
 
   return (
     <div className="space-y-6">
       <section className="surface-card p-6">
-        <h1 className="bg-gradient-to-r from-[var(--brand-indigo)] via-[var(--brand-red)] to-[var(--brand-cyan)] bg-clip-text text-3xl font-bold text-transparent">
+        <h1 className="bg-gradient-to-r from-[var(--brand-indigo)] to-[var(--brand-red)] bg-clip-text text-3xl font-bold text-transparent">
           Management Dashboard
         </h1>
         <p className="mt-1 text-slate-600">
           All modules in one place for daily rental operations.
         </p>
+        <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-red-100 bg-white/70 p-3">
+          <p className="text-sm text-slate-700">
+            To add cars with registration numbers, open Fleet Management.
+          </p>
+          <Link href="/dashboard/fleet" className="btn-primary text-sm">
+            Add car now
+          </Link>
+        </div>
       </section>
 
       <section className="grid gap-4 md:grid-cols-4">
@@ -101,7 +103,7 @@ export default async function DashboardPage() {
         </div>
         <div className="kpi-card">
           <p className="text-sm text-slate-500">Customers</p>
-          <p className="text-3xl font-black text-[var(--brand-green)]">{customersCount}</p>
+          <p className="text-3xl font-black text-[var(--brand-indigo)]">{customersCount}</p>
         </div>
         <div className="kpi-card">
           <p className="text-sm text-slate-500">Bookings</p>

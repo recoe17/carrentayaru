@@ -46,7 +46,7 @@ export default async function RootLayout({
                   alt="Yarutso Car Rental"
                   className="h-10 w-auto"
                 />
-                <span className="bg-gradient-to-r from-[var(--brand-red)] via-[var(--brand-orange)] to-[var(--brand-indigo)] bg-clip-text text-lg font-bold text-transparent">
+                <span className="bg-gradient-to-r from-[var(--brand-red)] to-[var(--brand-indigo)] bg-clip-text text-lg font-bold text-transparent">
                   Yarutso Car Rental
                 </span>
               </Link>

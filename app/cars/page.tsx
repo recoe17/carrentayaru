@@ -47,6 +47,7 @@ export default async function CarsPage() {
                 <p className="text-sm text-slate-600">
                   {car.location} • {car.seats} seats • {car.transmission} • {car.fuelType}
                 </p>
+                <p className="text-sm text-slate-600">Plate: {car.numberPlate ?? "—"}</p>
                 <p className="font-semibold text-[var(--brand-red)]">
                   ${Number(car.dailyRate).toFixed(2)} / day
                 </p>

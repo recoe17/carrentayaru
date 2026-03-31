@@ -17,6 +17,7 @@ function makeNumber(prefix: string) {
 const carSchema = z.object({
   name: z.string().min(2),
   brand: z.string().min(2),
+  numberPlate: z.string().min(3),
   dailyRate: z.coerce.number().positive(),
   status: z.enum(["AVAILABLE", "RENTED", "MAINTENANCE"]).optional().default("AVAILABLE"),
   mileageKm: z.coerce.number().int().min(0).optional().default(0),
@@ -156,6 +157,7 @@ export async function createCar(formData: FormData) {
     data: {
       ...parsed,
       imageUrl: parsed.imageUrl || null,
+      numberPlate: parsed.numberPlate.toUpperCase(),
       dailyRate: parsed.dailyRate,
       status: parsed.status,
       mileageKm: parsed.mileageKm,
