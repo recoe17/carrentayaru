@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
@@ -16,8 +17,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SwiftRide Rentals",
-  description: "Full-stack car rental system built with Next.js",
+  title: "Yarutso Car Rental",
+  description: "Car rental management system",
+  icons: {
+    icon: "/yarutso-logo.png",
+  },
 };
 
 export default async function RootLayout({
@@ -36,8 +40,15 @@ export default async function RootLayout({
         <body className="min-h-full bg-slate-100 text-slate-900">
           <header className="border-b border-slate-200 bg-white">
             <nav className="mx-auto flex max-w-6xl items-center justify-between p-4">
-              <Link href="/" className="text-lg font-bold text-blue-700">
-                SwiftRide Rentals
+              <Link href="/" className="flex items-center gap-3">
+                <img
+                  src="/yarutso-logo.png"
+                  alt="Yarutso Car Rental"
+                  className="h-10 w-auto"
+                />
+                <span className="text-lg font-bold text-[var(--brand-red)]">
+                  Yarutso Car Rental
+                </span>
               </Link>
               <div className="flex items-center gap-4 text-sm">
                 <Link href="/">Cars</Link>
@@ -49,7 +60,7 @@ export default async function RootLayout({
                   </>
                 ) : (
                   <SignInButton mode="modal">
-                    <button className="rounded-md bg-blue-700 px-3 py-1.5 text-white">
+                    <button className="rounded-md bg-[var(--brand-red)] px-3 py-1.5 text-white">
                       Sign in
                     </button>
                   </SignInButton>

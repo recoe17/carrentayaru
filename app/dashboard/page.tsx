@@ -63,7 +63,7 @@ export default async function DashboardPage() {
           <input name="fuelType" placeholder="Fuel type (Petrol)" required className="input" />
           <input name="location" placeholder="Location (Harare)" required className="input" />
           <input name="imageUrl" placeholder="Image URL (optional)" className="input" />
-          <button type="submit" className="rounded-md bg-blue-700 px-4 py-2 text-white md:col-span-2">
+          <button type="submit" className="btn-primary md:col-span-2">
             Save car
           </button>
         </form>
@@ -88,7 +88,7 @@ export default async function DashboardPage() {
                   <input type="hidden" name="carId" value={car.id} />
                   <button
                     type="submit"
-                    className="rounded-md bg-red-600 px-2.5 py-1.5 text-xs text-white"
+                    className="btn-danger px-2.5 py-1.5 text-xs"
                   >
                     Remove car
                   </button>
@@ -124,7 +124,7 @@ export default async function DashboardPage() {
                   </select>
                   <button
                     type="submit"
-                    className="rounded-md bg-slate-900 px-2.5 py-1.5 text-xs text-white"
+                    className="btn-dark px-2.5 py-1.5 text-xs"
                   >
                     Update
                   </button>

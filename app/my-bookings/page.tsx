@@ -49,7 +49,7 @@ export default async function MyBookingsPage() {
                   <input type="hidden" name="bookingId" value={booking.id} />
                   <button
                     type="submit"
-                    className="rounded-md bg-red-600 px-3 py-2 text-sm text-white"
+                    className="btn-danger text-sm"
                   >
                     Cancel booking
                   </button>

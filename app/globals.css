@@ -3,6 +3,8 @@
 :root {
   --background: #f1f5f9;
   --foreground: #0f172a;
+  --brand-red: #e60000;
+  --brand-green: #3f6f3e;
 }
 
 @theme inline {
@@ -16,6 +18,25 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+.btn-primary {
+  @apply rounded-md px-3 py-2 text-white;
+  background: var(--brand-red);
+}
+
+.btn-primary:hover {
+  filter: brightness(0.92);
+}
+
+.btn-danger {
+  @apply rounded-md px-3 py-2 text-white;
+  background: #b91c1c;
+}
+
+.btn-dark {
+  @apply rounded-md px-3 py-2 text-white;
+  background: #0f172a;
 }
 
 .input {

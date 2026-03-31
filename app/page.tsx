@@ -49,7 +49,7 @@ export default async function Home() {
                   {car.location} • {car.seats} seats • {car.transmission} •{" "}
                   {car.fuelType}
                 </p>
-                <p className="font-semibold text-blue-700">
+                <p className="font-semibold text-[var(--brand-red)]">
                   ${Number(car.dailyRate).toFixed(2)} / day
                 </p>
               </div>
@@ -79,14 +79,14 @@ export default async function Home() {
                   </label>
                   <button
                     type="submit"
-                    className="mt-2 rounded-md bg-blue-700 px-3 py-2 text-white"
+                    className="btn-primary mt-2"
                   >
                     Book now
                   </button>
                 </form>
               ) : (
                 <SignInButton mode="modal">
-                  <button className="mt-4 rounded-md bg-slate-900 px-3 py-2 text-sm text-white">
+                  <button className="btn-dark mt-4 text-sm">
                     Sign in to book
                   </button>
                 </SignInButton>
