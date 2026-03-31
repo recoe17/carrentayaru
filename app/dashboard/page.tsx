@@ -28,10 +28,16 @@ export default async function DashboardPage() {
 
   const modules = [
     {
-      title: "Fleet Management",
+      title: "Cars",
+      description: "Browse available cars as guests or signed-in users.",
+      href: "/cars",
+      badge: `${carsCount} listed`,
+    },
+    {
+      title: "Dashboard",
       description: "Manage cars, pricing, and availability.",
       href: "/dashboard",
-      badge: `${carsCount} cars`,
+      badge: "overview",
     },
     {
       title: "Customers",
@@ -62,6 +68,12 @@ export default async function DashboardPage() {
       description: "Track service logs and due dates.",
       href: "/dashboard/service",
       badge: `${dueServiceCount} due soon`,
+    },
+    {
+      title: "My Bookings",
+      description: "View and manage user account bookings.",
+      href: "/my-bookings",
+      badge: "client portal",
     },
   ];
 
