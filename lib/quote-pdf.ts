@@ -46,6 +46,27 @@ export async function buildQuotePdf(data: QuotePdfData): Promise<Uint8Array> {
 
   y -= 70;
 
+  const quoteNoBoxW = 190;
+  const quoteNoBoxH = 34;
+  const quoteNoBoxX = marginX + 310;
+  const quoteNoBoxY = y + 18;
+  page.drawRectangle({
+    x: quoteNoBoxX,
+    y: quoteNoBoxY,
+    width: quoteNoBoxW,
+    height: quoteNoBoxH,
+    color: rgb(0.08, 0.13, 0.23),
+    borderWidth: 1,
+    borderColor: rgb(0.12, 0.27, 0.75),
+  });
+  page.drawText(`QUOTE NO: ${data.quoteNumber}`, {
+    x: quoteNoBoxX + 10,
+    y: quoteNoBoxY + 11,
+    size: 10.5,
+    font: fontBold,
+    color: rgb(1, 1, 1),
+  });
+
   const tableX = marginX;
   const tableW = 500;
   const rowH = 28;

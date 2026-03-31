@@ -21,9 +21,16 @@ export default async function QuotePreviewPage({
 
   return (
     <div className="space-y-6">
-      <section className="surface-card p-6">
-        <h1 className="text-2xl font-bold">Quote Preview</h1>
-        <p className="mt-1 text-slate-600">{quote.quoteNumber}</p>
+      <section className="surface-card overflow-hidden p-0">
+        <div className="bg-gradient-to-r from-[var(--brand-indigo)] to-[var(--brand-red)] p-6 text-white">
+          <h1 className="text-2xl font-bold">Quote Preview</h1>
+          <p className="mt-1 text-sm text-white/90">Professional quotation layout</p>
+        </div>
+        <div className="p-6">
+          <div className="inline-flex items-center rounded-full bg-slate-900 px-4 py-1.5 text-sm font-semibold tracking-wide text-white">
+            Quote No: {quote.quoteNumber}
+          </div>
+        </div>
       </section>
 
       <section className="surface-card p-6">
